@@ -20,6 +20,25 @@ const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const isProduction = process.env.NODE_ENV === "production";
+
+/**
+ * Allows Vite dev servers to move ports locally while keeping production locked to CLIENT_URL.
+ * @param {string} origin Request origin.
+ * @returns {boolean} Whether the origin is a local development frontend.
+ */
+const isLocalDevelopmentOrigin = (origin) => {
+  if (isProduction || !origin) {
+    return false;
+  }
+
+  try {
+    const { hostname } = new URL(origin);
+    return ["localhost", "127.0.0.1"].includes(hostname);
+  } catch (_error) {
+    return false;
+  }
+};
 
 app.use(helmet());
 app.use(express.json({ limit: "1mb" }));
@@ -29,7 +48,7 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin) || isLocalDevelopmentOrigin(origin)) {
         return callback(null, true);
       }
 

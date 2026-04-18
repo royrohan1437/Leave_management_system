@@ -87,6 +87,8 @@ For deployment, set `CLIENT_URL` on the backend to the deployed frontend URL. Mu
 
 `DNS_SERVERS` is optional, but useful on local machines where Node cannot resolve MongoDB Atlas `mongodb+srv` records through the default resolver.
 
+In local development, the backend allows `localhost` and `127.0.0.1` frontend origins so Vite can move from `5173` to `5174` when a port is busy. In production, CORS is restricted to `CLIENT_URL`.
+
 ## Demo Credentials
 
 | Role | Email | Password |
