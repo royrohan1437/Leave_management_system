@@ -17,6 +17,8 @@ const buildLeaveFilters = (query) => {
 
   if (query.status && Object.values(LEAVE_STATUS).includes(query.status)) {
     filters.status = query.status;
+  } else if (query.processed === "true") {
+    filters.status = { $in: [LEAVE_STATUS.APPROVED, LEAVE_STATUS.REJECTED] };
   }
 
   if (query.employee && mongoose.Types.ObjectId.isValid(query.employee)) {
