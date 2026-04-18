@@ -26,6 +26,11 @@ export const Login = () => {
     return <Navigate to={user.role === ROLES.ADMIN ? "/admin/requests" : "/employee/dashboard"} replace />;
   }
 
+  /**
+   * Submits login credentials and routes the user by role.
+   * @param {SubmitEvent} event Form submit event.
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 

@@ -28,6 +28,10 @@ export const AppShell = () => {
 
   const notificationCount = user?.role === ROLES.ADMIN ? pendingRequests : processedUpdates;
 
+  /**
+   * Clears the authenticated session and returns to login.
+   * @returns {void}
+   */
   const handleLogout = () => {
     logout();
     reset();

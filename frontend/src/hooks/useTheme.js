@@ -15,6 +15,10 @@ export const useTheme = () => {
     localStorage.setItem("lms-theme", theme);
   }, [theme]);
 
+  /**
+   * Switches between the persisted light and dark themes.
+   * @returns {void}
+   */
   const toggleTheme = () => {
     setTheme((current) => (current === "dark" ? "light" : "dark"));
   };

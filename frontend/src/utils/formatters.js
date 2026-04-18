@@ -33,6 +33,24 @@ export const getTodayInputValue = () => {
 };
 
 /**
+ * Converts an API date into yyyy-mm-dd format for date inputs.
+ * @param {string|Date} value API date value.
+ * @returns {string} Date input value.
+ */
+export const toDateInputValue = (value) => {
+  if (!value) return "";
+
+  const date = typeof value === "string" ? parseISO(value) : value;
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return offsetDate.toISOString().slice(0, 10);
+};
+
+/**
  * Calculates inclusive days between two yyyy-mm-dd values.
  * @param {string} startDate Date input start value.
  * @param {string} endDate Date input end value.

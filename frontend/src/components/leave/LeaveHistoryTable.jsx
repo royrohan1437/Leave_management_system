@@ -19,9 +19,25 @@ export const LeaveHistoryTable = ({
   leaves = [],
   showEmployee = false,
   onCancel,
+  onAdjust,
   actionId,
   emptyMessage = "No leave records found."
 }) => {
+  /**
+   * Determines whether the leave can be sent for extension/shortening.
+   * @param {object} leave Leave row.
+   * @returns {boolean} Whether the leave is current/future and pending/approved.
+   */
+  const canAdjustLeave = (leave) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(leave.endDate);
+    endDate.setHours(0, 0, 0, 0);
+
+    return [LEAVE_STATUS.PENDING, LEAVE_STATUS.APPROVED].includes(leave.status) && endDate >= today;
+  };
+
   if (!leaves.length) {
     return (
       <Card>
@@ -44,7 +60,7 @@ export const LeaveHistoryTable = ({
               <TableHead>Days</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Notes</TableHead>
-              {onCancel ? <TableHead className="text-right">Action</TableHead> : null}
+              {onCancel || onAdjust ? <TableHead className="text-right">Action</TableHead> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -73,18 +89,29 @@ export const LeaveHistoryTable = ({
                     <p className="mt-1 truncate text-xs text-destructive">{leave.rejectionReason}</p>
                   ) : null}
                 </TableCell>
-                {onCancel ? (
+                {onCancel || onAdjust ? (
                   <TableCell className="text-right">
-                    {leave.status === LEAVE_STATUS.PENDING ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        loading={actionId === leave._id}
-                        onClick={() => onCancel(leave._id)}
-                      >
-                        Cancel
-                      </Button>
-                    ) : null}
+                    <div className="flex justify-end gap-2">
+                      {onAdjust && canAdjustLeave(leave) ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onAdjust(leave)}
+                        >
+                          Adjust
+                        </Button>
+                      ) : null}
+                      {onCancel && leave.status === LEAVE_STATUS.PENDING ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          loading={actionId === leave._id}
+                          onClick={() => onCancel(leave._id)}
+                        >
+                          Cancel
+                        </Button>
+                      ) : null}
+                    </div>
                   </TableCell>
                 ) : null}
               </TableRow>

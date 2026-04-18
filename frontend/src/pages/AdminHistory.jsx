@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { AdjustmentHistoryTable } from "@/components/leave/AdjustmentHistoryTable";
 import { AdminFilters } from "@/components/leave/AdminFilters";
 import { LeaveHistoryTable } from "@/components/leave/LeaveHistoryTable";
 import { PageLoader } from "@/components/ui/spinner";
@@ -16,18 +17,37 @@ const defaultFilters = {
  * Admin processed request history with filters.
  */
 export const AdminHistory = () => {
-  const { adminLeaves, employeeRows, loading, fetchAdminLeaves, fetchEmployeeDashboard } = useLeaveStore();
+  const {
+    adminLeaves,
+    adminAdjustments,
+    employeeRows,
+    loading,
+    fetchAdminLeaves,
+    fetchAdminAdjustments,
+    fetchEmployeeDashboard
+  } = useLeaveStore();
   const [filters, setFilters] = useState(defaultFilters);
 
   useEffect(() => {
     fetchEmployeeDashboard();
     fetchAdminLeaves({ processed: "true" });
-  }, [fetchAdminLeaves, fetchEmployeeDashboard]);
+    fetchAdminAdjustments({ processed: "true" });
+  }, [fetchAdminAdjustments, fetchAdminLeaves, fetchEmployeeDashboard]);
 
+  /**
+   * Updates a single admin history filter.
+   * @param {string} field Filter field name.
+   * @param {string} value Filter value.
+   */
   const updateFilter = (field, value) => {
     setFilters((current) => ({ ...current, [field]: value }));
   };
 
+  /**
+   * Removes empty filter values and defaults to processed requests.
+   * @param {object} source Current filter state.
+   * @returns {object} API query parameters.
+   */
   const buildQuery = (source) => {
     const query = Object.fromEntries(Object.entries(source).filter(([, value]) => Boolean(value)));
 
@@ -38,13 +58,24 @@ export const AdminHistory = () => {
     return query;
   };
 
+  /**
+   * Applies filters to both leave and adjustment histories.
+   * @returns {void}
+   */
   const applyFilters = () => {
-    fetchAdminLeaves(buildQuery(filters));
+    const query = buildQuery(filters);
+    fetchAdminLeaves(query);
+    fetchAdminAdjustments(query);
   };
 
+  /**
+   * Clears filters and reloads processed histories.
+   * @returns {void}
+   */
   const resetFilters = () => {
     setFilters(defaultFilters);
     fetchAdminLeaves({ processed: "true" });
+    fetchAdminAdjustments({ processed: "true" });
   };
 
   return (
@@ -60,14 +91,28 @@ export const AdminHistory = () => {
       />
 
       <div className="mt-5">
-        {loading && !adminLeaves.length ? (
+        {loading && !adminLeaves.length && !adminAdjustments.length ? (
           <PageLoader label="Loading history..." />
         ) : (
-          <LeaveHistoryTable
-            leaves={adminLeaves}
-            showEmployee
-            emptyMessage="No leave records match these filters."
-          />
+          <div className="grid gap-8">
+            <section className="grid gap-4">
+              <h2 className="text-lg font-semibold">Leave Requests</h2>
+              <LeaveHistoryTable
+                leaves={adminLeaves}
+                showEmployee
+                emptyMessage="No leave records match these filters."
+              />
+            </section>
+
+            <section className="grid gap-4">
+              <h2 className="text-lg font-semibold">Adjustment Requests</h2>
+              <AdjustmentHistoryTable
+                adjustments={adminAdjustments}
+                showEmployee
+                emptyMessage="No adjustment records match these filters."
+              />
+            </section>
+          </div>
         )}
       </div>
     </div>

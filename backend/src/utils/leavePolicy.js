@@ -24,14 +24,29 @@ import {
  * @param {Date} startDate Start date.
  * @param {Date} endDate End date.
  * @param {string[]} statuses Statuses to include.
+ * @param {string|null} excludeLeaveId Leave id to ignore during adjustment checks.
  * @returns {object} Mongoose query object.
  */
-export const buildOverlapQuery = (employeeId, startDate, endDate, statuses = ACTIVE_LEAVE_STATUSES) => ({
-  employee: employeeId,
-  status: { $in: statuses },
-  startDate: { $lte: endDate },
-  endDate: { $gte: startDate }
-});
+export const buildOverlapQuery = (
+  employeeId,
+  startDate,
+  endDate,
+  statuses = ACTIVE_LEAVE_STATUSES,
+  excludeLeaveId = null
+) => {
+  const query = {
+    employee: employeeId,
+    status: { $in: statuses },
+    startDate: { $lte: endDate },
+    endDate: { $gte: startDate }
+  };
+
+  if (excludeLeaveId) {
+    query._id = { $ne: excludeLeaveId };
+  }
+
+  return query;
+};
 
 /**
  * Computes leave usage for an employee in a policy year.
@@ -39,21 +54,28 @@ export const buildOverlapQuery = (employeeId, startDate, endDate, statuses = ACT
  * @param {object} options Calculation options.
  * @param {Date} options.referenceDate Date used to select the year.
  * @param {string[]} options.statuses Leave statuses to include.
+ * @param {string|null} options.excludeLeaveId Leave id to exclude from policy usage.
  * @returns {Promise<object>} Usage summary.
  */
 export const getLeaveUsage = async (
   employeeId,
-  { referenceDate = new Date(), statuses = [LEAVE_STATUS.APPROVED] } = {}
+  { referenceDate = new Date(), statuses = [LEAVE_STATUS.APPROVED], excludeLeaveId = null } = {}
 ) => {
   const { start: yearStart, end: yearEnd } = getYearRange(referenceDate);
   const { start: monthStart, end: monthEnd } = getMonthRange(referenceDate);
 
-  const leaves = await LeaveRequest.find({
+  const usageQuery = {
     employee: employeeId,
     status: { $in: statuses },
     startDate: { $lte: yearEnd },
     endDate: { $gte: yearStart }
-  }).lean();
+  };
+
+  if (excludeLeaveId) {
+    usageQuery._id = { $ne: excludeLeaveId };
+  }
+
+  const leaves = await LeaveRequest.find(usageQuery).lean();
 
   const breakdown = {
     [LEAVE_TYPES.SICK]: 0,
@@ -117,6 +139,8 @@ export const getLeaveUsage = async (
  * @param {string|Date} params.startDate Requested start date.
  * @param {string|Date} params.endDate Requested end date.
  * @param {string|Date} [params.deliveryDate] Expected delivery date for maternity leave.
+ * @param {boolean} [params.allowPastStart] Allows current-leave adjustments to retain past start dates.
+ * @param {string|null} [params.excludeLeaveId] Leave id to exclude from overlap and balance calculations.
  * @returns {Promise<object>} Normalized request data and allocation.
  */
 export const validateAndAllocateLeave = async ({
@@ -125,7 +149,9 @@ export const validateAndAllocateLeave = async ({
   numberOfDays,
   startDate,
   endDate,
-  deliveryDate
+  deliveryDate,
+  allowPastStart = false,
+  excludeLeaveId = null
 }) => {
   const normalizedStart = toStartOfDay(startDate);
   const normalizedEnd = toStartOfDay(endDate);
@@ -143,7 +169,7 @@ export const validateAndAllocateLeave = async ({
     throw new AppError("Start date must be before or equal to end date.", 400);
   }
 
-  if (normalizedStart < getToday()) {
+  if (!allowPastStart && normalizedStart < getToday()) {
     throw new AppError("Leave requests can only be created for today or a future date.", 400);
   }
 
@@ -158,7 +184,7 @@ export const validateAndAllocateLeave = async ({
   }
 
   const overlap = await LeaveRequest.findOne(
-    buildOverlapQuery(user._id, normalizedStart, normalizedEnd)
+    buildOverlapQuery(user._id, normalizedStart, normalizedEnd, ACTIVE_LEAVE_STATUSES, excludeLeaveId)
   ).lean();
 
   if (overlap) {
@@ -173,7 +199,8 @@ export const validateAndAllocateLeave = async ({
   let unpaidDays = 0;
   const committedUsage = await getLeaveUsage(user._id, {
     referenceDate: normalizedStart,
-    statuses: ACTIVE_LEAVE_STATUSES
+    statuses: ACTIVE_LEAVE_STATUSES,
+    excludeLeaveId
   });
 
   if (NORMAL_PAID_LEAVE_TYPES.includes(leaveType)) {

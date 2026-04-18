@@ -42,15 +42,28 @@ export const LeaveApplicationForm = () => {
     setDocumentAcknowledged(false);
   }, [form.leaveType]);
 
+  /**
+   * Updates one leave application field in local form state.
+   * @param {string} field Form field name.
+   * @param {string} value Form field value.
+   */
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
+  /**
+   * Shows the UI-only upload placeholder toast.
+   * @returns {void}
+   */
   const handleUploadClick = () => {
     setDocumentAcknowledged(true);
     toast.info("This feature is under development");
   };
 
+  /**
+   * Validates client-side leave form rules before submission.
+   * @returns {string|null} Validation error message or null when valid.
+   */
   const validateForm = () => {
     if (!form.leaveType) return "Please select a leave type.";
     if (!form.startDate || !form.endDate) return "Please choose start and end dates.";
@@ -61,6 +74,11 @@ export const LeaveApplicationForm = () => {
     return null;
   };
 
+  /**
+   * Submits the leave form data to the server.
+   * @param {SubmitEvent} event Form submit event.
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
     const error = validateForm();

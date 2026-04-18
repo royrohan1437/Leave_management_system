@@ -30,6 +30,8 @@ A production-ready full-stack Leave Management System for role-based leave track
 - Overlap prevention for pending and approved leave requests
 - Future/today-only leave application dates
 - Admin approval and rejection workflow
+- Employee requests to extend or shorten pending, current, or future leave
+- Admin approval/rejection for leave adjustment requests with balance recalculation
 - Employee leave history and dashboard
 - Admin pending request cards, employee leave dashboard, processed history, and filters
 - Notification dots for new admin requests and employee status updates
@@ -164,9 +166,14 @@ Main routes:
 - `GET /leaves/mine`
 - `GET /leaves/summary`
 - `DELETE /leaves/:id`
+- `POST /leaves/:id/adjustments`
+- `GET /leaves/adjustments/mine`
 - `GET /admin/leaves`
 - `PATCH /admin/leaves/:id/approve`
 - `PATCH /admin/leaves/:id/reject`
+- `GET /admin/adjustments`
+- `PATCH /admin/adjustments/:id/approve`
+- `PATCH /admin/adjustments/:id/reject`
 - `GET /admin/employees/summary`
 - `GET /admin/employees/:employeeId/leaves`
 - `GET /notifications`

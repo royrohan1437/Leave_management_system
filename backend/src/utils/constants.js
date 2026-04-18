@@ -14,6 +14,11 @@ export const LEAVE_STATUS = Object.freeze({
   REJECTED: "Rejected"
 });
 
+export const LEAVE_ADJUSTMENT_TYPES = Object.freeze({
+  EXTENSION: "Extension",
+  SHORTENING: "Shortening"
+});
+
 export const LEAVE_TYPES = Object.freeze({
   SICK: "Sick Leave",
   CASUAL: "Casual Leave",
