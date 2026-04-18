@@ -74,6 +74,7 @@ JWT_SECRET=replace-with-a-long-random-secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
 SEED_USERS=true
+DNS_SERVERS=8.8.8.8,1.1.1.1
 ```
 
 Create `frontend/.env` from `frontend/.env.example`:
@@ -83,6 +84,8 @@ VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
 For deployment, set `CLIENT_URL` on the backend to the deployed frontend URL. Multiple origins can be comma-separated.
+
+`DNS_SERVERS` is optional, but useful on local machines where Node cannot resolve MongoDB Atlas `mongodb+srv` records through the default resolver.
 
 ## Demo Credentials
 
