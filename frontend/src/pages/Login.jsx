@@ -8,28 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/authStore";
 import { ROLES } from "@/utils/constants";
-import { cn } from "@/utils/cn";
-
-const demoAccounts = {
-  admin: {
-    label: "Admin",
-    role: ROLES.ADMIN,
-    email: "admin@penthara.ai",
-    password: "Admin@123"
-  },
-  rohan: {
-    label: "Rohan",
-    role: ROLES.EMPLOYEE,
-    email: "rohan@penthara.ai",
-    password: "Rohan@123"
-  },
-  poulami: {
-    label: "Poulami",
-    role: ROLES.EMPLOYEE,
-    email: "poulami@penthara.ai",
-    password: "Poulami@123"
-  }
-};
 
 /**
  * Login page with role toggle and password visibility control.
@@ -39,24 +17,13 @@ export const Login = () => {
   const location = useLocation();
   const { token, user, login, loading } = useAuthStore();
   const [role, setRole] = useState(ROLES.ADMIN);
-  const [email, setEmail] = useState(demoAccounts.admin.email);
-  const [password, setPassword] = useState(demoAccounts.admin.password);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   if (token && user) {
     return <Navigate to={user.role === ROLES.ADMIN ? "/admin/requests" : "/employee/dashboard"} replace />;
   }
-
-  const applyDemo = (account) => {
-    setRole(account.role);
-    setEmail(account.email);
-    setPassword(account.password);
-  };
-
-  const handleRoleChange = (nextRole) => {
-    setRole(nextRole);
-    applyDemo(nextRole === ROLES.ADMIN ? demoAccounts.admin : demoAccounts.rohan);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -89,7 +56,7 @@ export const Login = () => {
         <Card>
           <CardHeader>
             <CardTitle>Login</CardTitle>
-            <CardDescription>Use one of the seeded demo accounts.</CardDescription>
+            <CardDescription>Select your role and enter your credentials.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="mb-5 grid grid-cols-2 rounded-md border bg-muted p-1">
@@ -98,28 +65,11 @@ export const Login = () => {
                   key={option}
                   type="button"
                   variant={role === option ? "default" : "ghost"}
-                  onClick={() => handleRoleChange(option)}
+                  onClick={() => setRole(option)}
                 >
                   {option}
                 </Button>
               ))}
-            </div>
-
-            <div className="mb-5 flex flex-wrap gap-2">
-              {Object.values(demoAccounts)
-                .filter((account) => account.role === role)
-                .map((account) => (
-                  <Button
-                    key={account.email}
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className={cn(email === account.email && "border-primary text-primary")}
-                    onClick={() => applyDemo(account)}
-                  >
-                    {account.label}
-                  </Button>
-                ))}
             </div>
 
             <form className="grid gap-4" onSubmit={handleSubmit}>
