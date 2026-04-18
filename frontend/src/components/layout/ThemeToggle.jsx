@@ -29,7 +29,7 @@ export const ThemeToggle = ({ className }) => {
           "relative h-12 w-24 overflow-hidden rounded-[24px] border shadow-inner transition-colors",
           isDark
             ? "border-black/30 bg-[#101522]"
-            : "border-blue-300/80 bg-[#6fa0ff]"
+            : "border-blue-300/80 bg-[#2563EB]"
         )}
       >
         <span

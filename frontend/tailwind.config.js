@@ -7,7 +7,7 @@ export default {
       center: true,
       padding: "1rem",
       screens: {
-        "2xl": "1280px"
+        "2xl": "1200px"
       }
     },
     extend: {
@@ -52,7 +52,8 @@ export default {
         sm: "4px"
       },
       boxShadow: {
-        soft: "0 10px 28px rgba(15, 23, 42, 0.08)"
+        soft: "0 18px 50px rgba(17, 24, 39, 0.08)",
+        glow: "0 18px 46px rgba(37, 99, 235, 0.22)"
       }
     }
   },

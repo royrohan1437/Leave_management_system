@@ -40,31 +40,65 @@ export const Login = () => {
   };
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-background px-4 py-8 pt-24 sm:pt-8">
-      <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10 pt-24 sm:pt-10 md:py-20">
+      <div className="ai-overlay pointer-events-none absolute inset-0 opacity-80" />
+      <div className="ai-grid pointer-events-none absolute inset-0 opacity-70" />
+
+      <div className="absolute right-4 top-4 z-20 sm:right-8 sm:top-8">
         <ThemeToggle />
       </div>
 
-      <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-[1fr_420px]">
-        <section className="flex flex-col justify-center rounded-lg border bg-card p-6 shadow-soft">
-          <p className="text-sm font-semibold text-primary">Penthara Leave Desk</p>
-          <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-normal sm:text-5xl">
-            Simple leave tracking for employees and admins.
-          </h1>
-          <div className="mt-8 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
-            <div className="rounded-md border bg-background p-4">Paid leave balance</div>
-            <div className="rounded-md border bg-background p-4">Approval workflow</div>
-            <div className="rounded-md border bg-background p-4">Policy checks</div>
+      <div className="relative z-10 grid w-full max-w-[1200px] gap-6 lg:grid-cols-[1fr_430px]">
+        <section className="enterprise-surface relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-lg p-8 md:p-12">
+          <div className="absolute right-0 top-0 h-72 w-72 translate-x-24 -translate-y-24 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute bottom-0 right-10 h-64 w-64 translate-y-24 rounded-full bg-secondary/10 blur-3xl" />
+
+          <div className="relative z-10 max-w-2xl">
+            <p className="text-sm font-semibold text-primary">Penthara Leave Desk</p>
+            <h1 className="mt-5 text-4xl font-semibold tracking-normal sm:text-5xl">
+              Intelligent leave operations, calm by design.
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
+              A focused workspace for requests, balances, approvals, and policy-aware decisions.
+            </p>
+          </div>
+
+          <div className="relative z-10 mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-md border bg-background/80 p-4">
+              <p className="text-2xl font-semibold text-foreground">25</p>
+              <p className="mt-1 text-sm text-muted-foreground">Paid days</p>
+            </div>
+            <div className="rounded-md border bg-background/80 p-4">
+              <p className="text-2xl font-semibold text-foreground">12w</p>
+              <p className="mt-1 text-sm text-muted-foreground">Unpaid cover</p>
+            </div>
+            <div className="rounded-md border bg-background/80 p-4">
+              <p className="text-2xl font-semibold text-foreground">AI</p>
+              <p className="mt-1 text-sm text-muted-foreground">Policy layer</p>
+            </div>
+          </div>
+
+          <div className="relative z-10 mt-10 h-44 overflow-hidden rounded-lg border bg-background/70">
+            <div className="absolute inset-0 ai-grid opacity-90" />
+            <div className="absolute left-8 top-8 h-3 w-3 rounded-full bg-primary shadow-[0_0_24px_rgba(37,99,235,0.8)]" />
+            <div className="absolute left-1/3 top-20 h-2.5 w-2.5 rounded-full bg-secondary shadow-[0_0_24px_rgba(124,58,237,0.7)]" />
+            <div className="absolute bottom-9 right-14 h-3 w-3 rounded-full bg-accent shadow-[0_0_24px_rgba(236,72,153,0.65)]" />
+            <div className="absolute left-10 top-10 h-px w-1/3 rotate-[16deg] bg-[linear-gradient(90deg,#2563EB,transparent)]" />
+            <div className="absolute bottom-14 right-16 h-px w-1/2 -rotate-[12deg] bg-[linear-gradient(90deg,transparent,#7C3AED,#EC4899)]" />
+            <div className="absolute left-1/2 top-8 rounded-md border bg-card/90 px-4 py-3 shadow-soft">
+              <p className="text-xs font-semibold text-muted-foreground">Balance Signal</p>
+              <p className="mt-1 text-sm font-semibold text-foreground">Ready for review</p>
+            </div>
           </div>
         </section>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
+        <Card className="enterprise-surface self-center">
+          <CardHeader className="p-8 pb-4">
+            <CardTitle className="text-2xl">Sign In</CardTitle>
             <CardDescription>Select your role and enter your credentials.</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="mb-5 grid grid-cols-2 rounded-md border bg-muted p-1">
+          <CardContent className="p-8 pt-2">
+            <div className="mb-6 grid grid-cols-2 rounded-md border bg-muted p-1">
               {[ROLES.ADMIN, ROLES.EMPLOYEE].map((option) => (
                 <Button
                   key={option}
@@ -77,7 +111,7 @@ export const Login = () => {
               ))}
             </div>
 
-            <form className="grid gap-4" onSubmit={handleSubmit}>
+            <form className="grid gap-5" onSubmit={handleSubmit}>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -85,6 +119,7 @@ export const Login = () => {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
+                  placeholder="name@company.com"
                   required
                 />
               </div>
@@ -97,6 +132,7 @@ export const Login = () => {
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     className="pr-10"
+                    placeholder="Enter password"
                     required
                   />
                   <Button
@@ -111,7 +147,7 @@ export const Login = () => {
                   </Button>
                 </div>
               </div>
-              <Button type="submit" loading={loading}>
+              <Button type="submit" variant="gradient" size="lg" loading={loading}>
                 Sign In
               </Button>
             </form>

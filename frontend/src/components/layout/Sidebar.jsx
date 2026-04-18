@@ -52,12 +52,13 @@ export const Sidebar = ({
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-card transition-all duration-200",
+          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-card/95 shadow-soft backdrop-blur-xl transition-all duration-200",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           collapsed ? "lg:w-20" : "lg:w-64"
         )}
       >
-        <div className="flex h-16 items-center justify-between border-b px-4">
+        <div className="relative flex h-16 items-center justify-between overflow-hidden border-b px-4">
+          <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(135deg,#2563EB,#7C3AED,#EC4899)]" />
           <div className={cn("min-w-0", collapsed && "lg:hidden")}>
             <p className="text-sm font-semibold">Penthara</p>
             <p className="text-xs text-muted-foreground">Leave Desk</p>

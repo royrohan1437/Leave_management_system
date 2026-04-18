@@ -35,7 +35,8 @@ export const AppShell = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen overflow-hidden bg-background">
+      <div className="ai-overlay pointer-events-none fixed inset-x-0 top-0 h-64 opacity-70" />
       <Sidebar
         collapsed={collapsed}
         mobileOpen={mobileOpen}
@@ -46,32 +47,34 @@ export const AppShell = () => {
         notifications={{ pendingRequests, processedUpdates }}
       />
 
-      <div className={cn("min-h-screen transition-all duration-200", collapsed ? "lg:pl-20" : "lg:pl-64")}>
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/95 px-4 backdrop-blur sm:px-6 lg:px-8">
-          <div className="flex min-w-0 items-center gap-3">
-            <Button
-              variant="outline"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">{user?.name}</p>
-              <p className="text-xs text-muted-foreground">{user?.role}</p>
+      <div className={cn("relative z-10 min-h-screen transition-all duration-200", collapsed ? "lg:pl-20" : "lg:pl-64")}>
+        <header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur-xl">
+          <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div className="flex min-w-0 items-center gap-3">
+              <Button
+                variant="outline"
+                size="icon"
+                className="lg:hidden"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">{user?.name}</p>
+                <p className="text-xs text-muted-foreground">{user?.role}</p>
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative rounded-md border bg-card p-2">
-              <Bell className="h-4 w-4 text-muted-foreground" />
-              {notificationCount > 0 ? (
-                <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-destructive ring-2 ring-background" />
-              ) : null}
+            <div className="flex items-center gap-2">
+              <div className="relative rounded-md border bg-card p-2 shadow-soft">
+                <Bell className="h-4 w-4 text-muted-foreground" />
+                {notificationCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-destructive ring-2 ring-background" />
+                ) : null}
+              </div>
+              <ThemeToggle />
             </div>
-            <ThemeToggle />
           </div>
         </header>
 
