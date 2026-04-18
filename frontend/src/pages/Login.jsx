@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,7 +40,11 @@ export const Login = () => {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+    <main className="relative flex min-h-screen items-center justify-center bg-background px-4 py-8 pt-24 sm:pt-8">
+      <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
+
       <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-[1fr_420px]">
         <section className="flex flex-col justify-center rounded-lg border bg-card p-6 shadow-soft">
           <p className="text-sm font-semibold text-primary">Penthara Leave Desk</p>
