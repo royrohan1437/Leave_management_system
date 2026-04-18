@@ -16,7 +16,7 @@ export const ThemeToggle = ({ className }) => {
       aria-label="Toggle dark mode"
       onClick={toggleTheme}
       className={cn(
-        "group inline-flex h-12 items-center gap-3 rounded-md px-1 text-sm font-bold tracking-normal outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "group inline-flex h-8 items-center gap-3 rounded-md px-1 text-sm font-bold tracking-normal outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         className
       )}
     >
@@ -26,7 +26,7 @@ export const ThemeToggle = ({ className }) => {
 
       <span
         className={cn(
-          "relative h-12 w-24 overflow-hidden rounded-[24px] border shadow-inner transition-colors",
+          "relative h-8 w-16 overflow-hidden rounded-[24px] border shadow-inner transition-colors",
           isDark
             ? "border-black/30 bg-[#101522]"
             : "border-blue-300/80 bg-[#2563EB]"
@@ -34,9 +34,9 @@ export const ThemeToggle = ({ className }) => {
       >
         <span
           className={cn(
-            "absolute top-1/2 z-10 h-9 w-9 -translate-y-1/2 rounded-full transition-all duration-300",
+            "absolute top-1/2 z-10 h-6 w-6 -translate-y-1/2 rounded-full transition-all duration-300",
             isDark
-              ? "left-[52px] bg-white shadow-[inset_-12px_0_0_#101522,0_5px_14px_rgba(0,0,0,0.25)]"
+              ? "left-[40px] bg-white shadow-[inset_-12px_0_0_#101522,0_5px_14px_rgba(0,0,0,0.25)]"
               : "left-2 bg-white shadow-[0_5px_14px_rgba(38,86,164,0.28)]"
           )}
         />
@@ -56,7 +56,7 @@ export const ThemeToggle = ({ className }) => {
 
         <span
           className={cn(
-            "absolute left-7 top-3 h-1.5 w-1.5 rotate-45 bg-white transition-opacity",
+            "absolute left-5 top-3 h-1.5 w-1.5 rotate-45 bg-white transition-opacity",
             isDark ? "opacity-100" : "opacity-0"
           )}
         />
@@ -68,7 +68,7 @@ export const ThemeToggle = ({ className }) => {
         />
         <span
           className={cn(
-            "absolute left-9 top-8 h-1.5 w-1.5 rotate-45 bg-white transition-opacity",
+            "absolute left-3 top-7 h-1.5 w-1.5 rotate-45 bg-white transition-opacity",
             isDark ? "opacity-100" : "opacity-0"
           )}
         />

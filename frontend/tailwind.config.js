@@ -54,7 +54,11 @@ export default {
       boxShadow: {
         soft: "0 18px 50px rgba(17, 24, 39, 0.08)",
         glow: "0 18px 46px rgba(37, 99, 235, 0.22)"
-      }
+      },
+      fontFamily: {
+      techno: ['Orbitron', 'sans-serif', 'bold'],
+      logo: ['Michroma', 'sans-serif', 'bold'],
+    }
     }
   },
   plugins: []

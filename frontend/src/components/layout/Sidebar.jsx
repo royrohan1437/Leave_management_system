@@ -60,7 +60,7 @@ export const Sidebar = ({
         <div className="relative flex h-16 items-center justify-between overflow-hidden border-b px-4">
           <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(135deg,#2563EB,#7C3AED,#EC4899)]" />
           <div className={cn("min-w-0", collapsed && "lg:hidden")}>
-            <p className="text-sm font-semibold">Penthara</p>
+            <p className="text-xl font-logo tracking-widest ">PENTHARA AI</p>
             <p className="text-xs text-muted-foreground">Leave Desk</p>
           </div>
           <Button

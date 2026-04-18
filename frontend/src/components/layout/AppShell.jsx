@@ -61,7 +61,7 @@ export const AppShell = () => {
                 <Menu className="h-4 w-4" />
               </Button>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold">{user?.name}</p>
+                <p className="truncate text-xl font-semibold">{user?.name}</p>
                 <p className="text-xs text-muted-foreground">{user?.role}</p>
               </div>
             </div>
