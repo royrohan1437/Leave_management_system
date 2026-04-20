@@ -95,7 +95,7 @@ export const Sidebar = ({
                 <Icon className="h-5 w-5 shrink-0" />
                 <span className={cn("truncate", collapsed && "lg:hidden")}>{item.label}</span>
                 {showDot ? (
-                  <span className="ml-auto h-2.5 w-2.5 rounded-full bg-destructive ring-2 ring-card" />
+                  <span className="mc-auto h-2.5 w-2.5 rounded-full bg-destructive ring-2 ring-card" />
                 ) : null}
               </NavLink>
             );

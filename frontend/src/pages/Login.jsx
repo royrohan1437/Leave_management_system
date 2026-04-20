@@ -61,11 +61,10 @@ export const Login = () => {
           <div className="relative z-10 max-w-2xl">
             <p className="text-sm font-semibold text-primary">Penthara Leave Desk</p>
             <h1 className="mt-5 text-4xl font-semibold tracking-normal sm:text-5xl">
-              Intelligent leave operations, calm by design.
+              Your time off, simplified.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
-              A focused workspace for requests, balances, approvals, and policy-aware decisions.
-            </p>
+            Manage your leave, track your balance, and get back to living.            </p>
           </div>
 
           <div className="relative z-10 mt-10 grid gap-4 sm:grid-cols-3">
