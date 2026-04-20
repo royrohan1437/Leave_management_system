@@ -14,20 +14,27 @@ const normalizeApiBaseUrl = (rawValue) => {
   }
 
   const trimmedValue = rawValue.trim().replace(/\/+$/, "");
+  const normalizePath = (value) => {
+    const segments = value.split("/").filter(Boolean);
+    return segments.length ? `/${segments.join("/")}` : "/";
+  };
 
   try {
     const url = new URL(trimmedValue);
-    const normalizedPath = url.pathname.replace(/\/+$/, "");
+    const normalizedPath = normalizePath(url.pathname);
 
     if (!normalizedPath || normalizedPath === "/") {
       url.pathname = "/api";
     } else if (!normalizedPath.endsWith("/api")) {
       url.pathname = `${normalizedPath}/api`;
+    } else {
+      url.pathname = normalizedPath;
     }
 
     return url.toString().replace(/\/+$/, "");
   } catch (_error) {
-    return trimmedValue.endsWith("/api") ? trimmedValue : `${trimmedValue}/api`;
+    const collapsedValue = trimmedValue.replace(/([^:]\/)\/+/g, "$1");
+    return collapsedValue.endsWith("/api") ? collapsedValue : `${collapsedValue}/api`;
   }
 };
 
