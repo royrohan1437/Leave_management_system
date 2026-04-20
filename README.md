@@ -2,6 +2,10 @@
 
 A production-ready full-stack Leave Management System for role-based leave tracking, employee requests, admin approvals, policy validation, and leave history reporting.
 
+## Live Project Link
+
+https://leave-management-system-1-iooo.onrender.com/
+
 ## Tech Stack
 
 **Frontend**
@@ -20,7 +24,7 @@ A production-ready full-stack Leave Management System for role-based leave track
 
 ## Features
 
-- Login-only authentication with predefined seeded users
+- Login-only authentication with predefined seeded users(only for demonstration purpose)
 - Admin and Employee protected routes
 - JWT-based API authorization
 - Leave application workflow with Pending, Approved, and Rejected statuses
@@ -69,8 +73,8 @@ Create `backend/.env` from `backend/.env.example`:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/leave_management_system
-JWT_SECRET=replace-with-a-long-random-secret
+MONGO_URI=mongodb://127.0.0.1:27017/leave_management_system  {or your own MongoDB URI}
+JWT_SECRET=replace-with-a-long-random-secret   
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
 SEED_USERS=true
@@ -83,10 +87,6 @@ Create `frontend/.env` from `frontend/.env.example`:
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-For deployment, set `CLIENT_URL` on the backend to the deployed frontend URL. Multiple origins can be comma-separated.
-
-`DNS_SERVERS` is optional, but useful on local machines where Node cannot resolve MongoDB Atlas `mongodb+srv` records through the default resolver.
-
 In local development, the backend allows `localhost` and `127.0.0.1` frontend origins so Vite can move from `5173` to `5174` when a port is busy. In production, CORS is restricted to `CLIENT_URL`.
 
 ## Demo Credentials
@@ -94,8 +94,8 @@ In local development, the backend allows `localhost` and `127.0.0.1` frontend or
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@penthara.ai` | `Admin@123` |
-| Employee | `rohan@penthara.ai` | `Rohan@123` |
-| Employee | `poulami@penthara.ai` | `Poulami@123` |
+| Employee (Male) | `rohan@penthara.ai` | `Rohan@123` |
+| Employee (Female) | `poulami@penthara.ai` | `Poulami@123` |
 
 `poulami@penthara.ai` is seeded as a female employee and can access maternity and menstrual leave options.
 
@@ -135,17 +135,6 @@ Open the Vite URL, usually:
 
 ```text
 http://localhost:5173
-```
-
-## Useful Scripts
-
-From the repository root:
-
-```bash
-npm run backend:dev
-npm run backend:seed
-npm run frontend:dev
-npm run frontend:build
 ```
 
 ## API Overview
@@ -189,7 +178,7 @@ The Blueprint already includes:
 - frontend SPA rewrite: `/* -> /index.html`
 - production backend host binding on `0.0.0.0`
 
-You still need to provide values for:
+One still need to provide values for:
 
 - `MONGO_URI`
 - `CLIENT_URL`
@@ -197,75 +186,41 @@ You still need to provide values for:
 
 `JWT_SECRET` is generated automatically by the Blueprint.
 
-### Render Manual Setup
+## Screenshots 
 
-**Backend Web Service**
-- Root directory: `backend`
-- Runtime: `Node`
-- Build command: `npm install`
-- Start command: `npm start`
-- Health check path: `/api/health`
+- Login Page (Role-based Login)
+  <br>
+  <br><img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/edab44d5-9cd5-44de-b177-b5b43a49fef8" /><br>
 
-Environment variables:
+- Admin's Leave Request Section
+  <br>
+  <br><img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/6ee0b03c-b6df-42e3-af54-35eaa663f371" /><br>
 
-```env
-NODE_ENV=production
-PORT=10000
-MONGO_URI=your-mongodb-atlas-uri
-JWT_SECRET=your-long-random-secret
-JWT_EXPIRES_IN=7d
-SEED_USERS=true
-CLIENT_URL=https://your-frontend-service.onrender.com
-```
+- Admin side Employee Dashboard
+  <br>
+  <br><img width="1919" height="968" alt="image" src="https://github.com/user-attachments/assets/77b1d30f-a21a-4c21-9a94-917a4f4ea4f9" /><br>
 
-**Frontend Static Site**
-- Root directory: `frontend`
-- Build command: `npm install && npm run build`
-- Publish directory: `dist`
+- Admin Side Leave History
+  <br>
+  <br><img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/6e984627-3944-4739-9ec6-ab8c9a55540d" /><br>
 
-Environment variables:
+- Employee's Leave Dashboard
+  <br>
+  <br><img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/b6cc79f1-7977-45b7-a10f-c1c45e4ff850" /><br>
 
-```env
-VITE_API_BASE_URL=https://your-backend-service.onrender.com/api
-```
+- Employee's Leave Application Form
+  <br>
+  <br><img width="1919" height="966" alt="image" src="https://github.com/user-attachments/assets/647efd36-1ab6-4e31-b9f9-7f8c683062b8" /><br>
 
-Add this rewrite rule for React Router if you deploy manually in the dashboard:
+- Employee's Leave History
+  <br>
+  <br><img width="1919" height="966" alt="image" src="https://github.com/user-attachments/assets/12afaea7-2bfe-4d20-a204-3ca89232903d" /><br>
 
-- Source: `/*`
-- Destination: `/index.html`
-- Action: `Rewrite`
+- Female Employee Leave Dashboard
+  <br>
+  <br><img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/4cc849d1-6bc6-4d3c-bb2e-3e12d9596eed" /><br>
 
-### Render Deployment Order
-
-1. Deploy the backend first.
-2. Copy the backend Render URL.
-3. Deploy the frontend with `VITE_API_BASE_URL` pointing to that backend URL plus `/api`.
-4. Copy the frontend Render URL.
-5. Update backend `CLIENT_URL` to the frontend URL.
-6. Redeploy the backend so CORS trusts the deployed frontend.
-
-## Commit Suggestions
-
-Backend:
-
-```bash
-git add .
-git commit -m "feat(api): add leave management backend"
-git push
-```
-
-Frontend:
-
-```bash
-git add .
-git commit -m "feat(client): add leave management frontend"
-git push
-```
-
-Documentation and setup:
-
-```bash
-git add .
-git commit -m "docs: add setup and deployment guide"
-git push
-```
+- Light Mode
+  <br>
+  <br><img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/12588907-11a2-4625-a4f2-a24b85e61a17" /><br>
+  <br><img width="1915" height="959" alt="image" src="https://github.com/user-attachments/assets/84614adb-828b-45bd-8d9e-de1241641618" /><br>
