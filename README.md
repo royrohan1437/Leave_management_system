@@ -230,7 +230,7 @@ One still need to provide values for:
   <a href="https://drive.google.com/file/d/1YK9Nak7IplpwXqtv8QUrq7l51DYEh0hk/view?usp=sharing">
     <img src="https://github.com/royrohan1437/Leave_management_system/blob/3bc86f051f1e4b305049ab88b4e49084954a8b44/frontend/src/assets/_thumbnail.png?raw=true" alt="Leave Management System Demo" width="800">
   </a>
-  <p><b> Assignment Demo Video</b></p>
+  <p><b> Click on the thumbnail to watch the Assignment Demo Video</b></p>
 </div>
 
 
