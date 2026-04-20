@@ -15,6 +15,7 @@ import { seedUsers } from "./utils/seedUsers.js";
 dotenv.config();
 
 const app = express();
+const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 5000;
 const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
   .split(",")
@@ -86,8 +87,9 @@ const startServer = async () => {
       await seedUsers();
     }
 
-    app.listen(port, () => {
-      console.log(`API server running on port ${port}`);
+    // Render expects the service to listen on the assigned host/port pair.
+    app.listen(port, host, () => {
+      console.log(`API server running on http://${host}:${port}`);
     });
   } catch (error) {
     console.error("Server startup failed:", error);

@@ -19,25 +19,9 @@ export const LeaveHistoryTable = ({
   leaves = [],
   showEmployee = false,
   onCancel,
-  onAdjust,
   actionId,
   emptyMessage = "No leave records found."
 }) => {
-  /**
-   * Determines whether the leave can be sent for extension/shortening.
-   * @param {object} leave Leave row.
-   * @returns {boolean} Whether the leave is current/future and pending/approved.
-   */
-  const canAdjustLeave = (leave) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(leave.endDate);
-    endDate.setHours(0, 0, 0, 0);
-
-    return [LEAVE_STATUS.PENDING, LEAVE_STATUS.APPROVED].includes(leave.status) && endDate >= today;
-  };
-
   if (!leaves.length) {
     return (
       <Card>
@@ -60,7 +44,7 @@ export const LeaveHistoryTable = ({
               <TableHead>Days</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Notes</TableHead>
-              {onCancel || onAdjust ? <TableHead className="text-right">Action</TableHead> : null}
+              {onCancel ? <TableHead className="text-right">Action</TableHead> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -89,18 +73,9 @@ export const LeaveHistoryTable = ({
                     <p className="mt-1 truncate text-xs text-destructive">{leave.rejectionReason}</p>
                   ) : null}
                 </TableCell>
-                {onCancel || onAdjust ? (
+                {onCancel ? (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      {onAdjust && canAdjustLeave(leave) ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onAdjust(leave)}
-                        >
-                          Adjust
-                        </Button>
-                      ) : null}
                       {onCancel && leave.status === LEAVE_STATUS.PENDING ? (
                         <Button
                           variant="outline"

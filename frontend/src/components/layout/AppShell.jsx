@@ -40,7 +40,7 @@ export const AppShell = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      <div className="ai-overlay pointer-events-none fixed inset-x-0 top-0 h-64 opacity-70" />
+      <div className="ai-overlay pointer-events-none fixed inset-x-0 top-0 h-[960px] opacity-70" />
       <Sidebar
         collapsed={collapsed}
         mobileOpen={mobileOpen}

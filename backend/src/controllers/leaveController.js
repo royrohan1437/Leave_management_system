@@ -1,5 +1,4 @@
 import { LeaveRequest } from "../models/LeaveRequest.js";
-import { LeaveAdjustmentRequest } from "../models/LeaveAdjustmentRequest.js";
 import { AppError } from "../utils/AppError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { LEAVE_STATUS } from "../utils/constants.js";
@@ -62,18 +61,12 @@ export const getMyLeaves = asyncHandler(async (req, res) => {
  */
 export const getMyLeaveSummary = asyncHandler(async (req, res) => {
   const summary = await getLeaveUsage(req.user._id);
-  const [pendingLeaves, pendingAdjustments] = await Promise.all([
-    LeaveRequest.countDocuments({
-      employee: req.user._id,
-      status: LEAVE_STATUS.PENDING
-    }),
-    LeaveAdjustmentRequest.countDocuments({
-      employee: req.user._id,
-      status: LEAVE_STATUS.PENDING
-    })
-  ]);
+  const pendingCount = await LeaveRequest.countDocuments({
+    employee: req.user._id,
+    status: LEAVE_STATUS.PENDING
+  });
 
-  res.json({ summary, pendingCount: pendingLeaves + pendingAdjustments });
+  res.json({ summary, pendingCount });
 });
 
 /**

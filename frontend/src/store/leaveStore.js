@@ -1,19 +1,14 @@
 import { create } from "zustand";
 import {
-  approveLeaveAdjustmentRequest,
   approveLeaveRequest,
-  getAdminAdjustmentsRequest,
   getAdminLeavesRequest,
   getEmployeeDashboardRequest,
   getEmployeeHistoryRequest,
-  rejectLeaveAdjustmentRequest,
   rejectLeaveRequest
 } from "@/services/adminService";
 import {
   cancelLeaveRequest,
-  createLeaveAdjustmentRequest,
   createLeaveRequest,
-  getMyLeaveAdjustmentsRequest,
   getMyLeavesRequest,
   getMyLeaveSummaryRequest
 } from "@/services/leaveService";
@@ -23,9 +18,7 @@ export const useLeaveStore = create((set, get) => ({
   myLeaves: [],
   summary: null,
   pendingCount: 0,
-  myAdjustments: [],
   adminLeaves: [],
-  adminAdjustments: [],
   employeeRows: [],
   selectedEmployeeHistory: null,
   adminFilters: {},
@@ -44,21 +37,6 @@ export const useLeaveStore = create((set, get) => ({
     try {
       const data = await getMyLeavesRequest();
       set({ myLeaves: data.leaves || [], loading: false });
-    } catch (error) {
-      set({ loading: false, error: getErrorMessage(error) });
-    }
-  },
-
-  /**
-   * Loads the authenticated employee leave adjustment request history.
-   * @returns {Promise<void>}
-   */
-  fetchMyAdjustments: async () => {
-    set({ loading: true, error: null });
-
-    try {
-      const data = await getMyLeaveAdjustmentsRequest();
-      set({ myAdjustments: data.adjustments || [], loading: false });
     } catch (error) {
       set({ loading: false, error: getErrorMessage(error) });
     }
@@ -129,30 +107,6 @@ export const useLeaveStore = create((set, get) => ({
   },
 
   /**
-   * Submits an extension or shortening request for an existing leave.
-   * @param {string} id Leave request id.
-   * @param {object} payload Adjusted date range and reason.
-   * @returns {Promise<object>} API response.
-   */
-  requestLeaveAdjustment: async (id, payload) => {
-    set({ actionId: id, error: null });
-
-    try {
-      const data = await createLeaveAdjustmentRequest(id, payload);
-      set((state) => ({
-        myAdjustments: [data.adjustment, ...state.myAdjustments],
-        pendingCount: state.pendingCount + 1,
-        actionId: null
-      }));
-      return data;
-    } catch (error) {
-      const message = getErrorMessage(error);
-      set({ actionId: null, error: message });
-      throw new Error(message);
-    }
-  },
-
-  /**
    * Loads admin leave requests with filters.
    * @param {object} filters Query filters.
    * @returns {Promise<void>}
@@ -163,22 +117,6 @@ export const useLeaveStore = create((set, get) => ({
     try {
       const data = await getAdminLeavesRequest(filters);
       set({ adminLeaves: data.leaves || [], loading: false });
-    } catch (error) {
-      set({ loading: false, error: getErrorMessage(error) });
-    }
-  },
-
-  /**
-   * Loads admin leave adjustment requests with filters.
-   * @param {object} filters Query filters.
-   * @returns {Promise<void>}
-   */
-  fetchAdminAdjustments: async (filters = get().adminFilters) => {
-    set({ loading: true, error: null, adminFilters: filters });
-
-    try {
-      const data = await getAdminAdjustmentsRequest(filters);
-      set({ adminAdjustments: data.adjustments || [], loading: false });
     } catch (error) {
       set({ loading: false, error: getErrorMessage(error) });
     }
@@ -219,55 +157,6 @@ export const useLeaveStore = create((set, get) => ({
       const data = await rejectLeaveRequest(id, reason);
       set((state) => ({
         adminLeaves: state.adminLeaves.map((leave) => (leave._id === id ? data.leave : leave)),
-        actionId: null
-      }));
-      return data;
-    } catch (error) {
-      const message = getErrorMessage(error);
-      set({ actionId: null, error: message });
-      throw new Error(message);
-    }
-  },
-
-  /**
-   * Approves a leave adjustment request and updates the admin list.
-   * @param {string} id Adjustment id.
-   * @returns {Promise<object>} API response.
-   */
-  approveAdjustment: async (id) => {
-    set({ actionId: id, error: null });
-
-    try {
-      const data = await approveLeaveAdjustmentRequest(id);
-      set((state) => ({
-        adminAdjustments: state.adminAdjustments.map((adjustment) => (
-          adjustment._id === id ? data.adjustment : adjustment
-        )),
-        actionId: null
-      }));
-      return data;
-    } catch (error) {
-      const message = getErrorMessage(error);
-      set({ actionId: null, error: message });
-      throw new Error(message);
-    }
-  },
-
-  /**
-   * Rejects a leave adjustment request and updates the admin list.
-   * @param {string} id Adjustment id.
-   * @param {string} reason Optional rejection reason.
-   * @returns {Promise<object>} API response.
-   */
-  rejectAdjustment: async (id, reason) => {
-    set({ actionId: id, error: null });
-
-    try {
-      const data = await rejectLeaveAdjustmentRequest(id, reason);
-      set((state) => ({
-        adminAdjustments: state.adminAdjustments.map((adjustment) => (
-          adjustment._id === id ? data.adjustment : adjustment
-        )),
         actionId: null
       }));
       return data;

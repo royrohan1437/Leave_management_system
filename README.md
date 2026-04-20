@@ -30,8 +30,6 @@ A production-ready full-stack Leave Management System for role-based leave track
 - Overlap prevention for pending and approved leave requests
 - Future/today-only leave application dates
 - Admin approval and rejection workflow
-- Employee requests to extend or shorten pending, current, or future leave
-- Admin approval/rejection for leave adjustment requests with balance recalculation
 - Employee leave history and dashboard
 - Admin pending request cards, employee leave dashboard, processed history, and filters
 - Notification dots for new admin requests and employee status updates
@@ -166,14 +164,9 @@ Main routes:
 - `GET /leaves/mine`
 - `GET /leaves/summary`
 - `DELETE /leaves/:id`
-- `POST /leaves/:id/adjustments`
-- `GET /leaves/adjustments/mine`
 - `GET /admin/leaves`
 - `PATCH /admin/leaves/:id/approve`
 - `PATCH /admin/leaves/:id/reject`
-- `GET /admin/adjustments`
-- `PATCH /admin/adjustments/:id/approve`
-- `PATCH /admin/adjustments/:id/reject`
 - `GET /admin/employees/summary`
 - `GET /admin/employees/:employeeId/leaves`
 - `GET /notifications`
@@ -181,17 +174,75 @@ Main routes:
 
 ## Deployment Notes
 
-**Backend on Render/Railway**
+This repository now includes a root [`render.yaml`](./render.yaml) Blueprint for Render.
+
+### Render Blueprint
+
+The Blueprint creates:
+
+- `leave-management-system-api` as a Node web service
+- `leave-management-system-web` as a static site
+
+The Blueprint already includes:
+
+- backend health check path: `/api/health`
+- frontend SPA rewrite: `/* -> /index.html`
+- production backend host binding on `0.0.0.0`
+
+You still need to provide values for:
+
+- `MONGO_URI`
+- `CLIENT_URL`
+- `VITE_API_BASE_URL`
+
+`JWT_SECRET` is generated automatically by the Blueprint.
+
+### Render Manual Setup
+
+**Backend Web Service**
 - Root directory: `backend`
+- Runtime: `Node`
 - Build command: `npm install`
 - Start command: `npm start`
-- Required environment variables: `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL`, `PORT`
+- Health check path: `/api/health`
 
-**Frontend on Render**
+Environment variables:
+
+```env
+NODE_ENV=production
+PORT=10000
+MONGO_URI=your-mongodb-atlas-uri
+JWT_SECRET=your-long-random-secret
+JWT_EXPIRES_IN=7d
+SEED_USERS=true
+CLIENT_URL=https://your-frontend-service.onrender.com
+```
+
+**Frontend Static Site**
 - Root directory: `frontend`
 - Build command: `npm install && npm run build`
 - Publish directory: `dist`
-- Required environment variable: `VITE_API_BASE_URL`
+
+Environment variables:
+
+```env
+VITE_API_BASE_URL=https://your-backend-service.onrender.com/api
+```
+
+Add this rewrite rule for React Router if you deploy manually in the dashboard:
+
+- Source: `/*`
+- Destination: `/index.html`
+- Action: `Rewrite`
+
+### Render Deployment Order
+
+1. Deploy the backend first.
+2. Copy the backend Render URL.
+3. Deploy the frontend with `VITE_API_BASE_URL` pointing to that backend URL plus `/api`.
+4. Copy the frontend Render URL.
+5. Update backend `CLIENT_URL` to the frontend URL.
+6. Redeploy the backend so CORS trusts the deployed frontend.
 
 ## Commit Suggestions
 

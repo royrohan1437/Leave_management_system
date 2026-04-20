@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { AdjustmentHistoryTable } from "@/components/leave/AdjustmentHistoryTable";
 import { AdminFilters } from "@/components/leave/AdminFilters";
 import { LeaveHistoryTable } from "@/components/leave/LeaveHistoryTable";
 import { PageLoader } from "@/components/ui/spinner";
@@ -17,22 +16,13 @@ const defaultFilters = {
  * Admin processed request history with filters.
  */
 export const AdminHistory = () => {
-  const {
-    adminLeaves,
-    adminAdjustments,
-    employeeRows,
-    loading,
-    fetchAdminLeaves,
-    fetchAdminAdjustments,
-    fetchEmployeeDashboard
-  } = useLeaveStore();
+  const { adminLeaves, employeeRows, loading, fetchAdminLeaves, fetchEmployeeDashboard } = useLeaveStore();
   const [filters, setFilters] = useState(defaultFilters);
 
   useEffect(() => {
     fetchEmployeeDashboard();
     fetchAdminLeaves({ processed: "true" });
-    fetchAdminAdjustments({ processed: "true" });
-  }, [fetchAdminAdjustments, fetchAdminLeaves, fetchEmployeeDashboard]);
+  }, [fetchAdminLeaves, fetchEmployeeDashboard]);
 
   /**
    * Updates a single admin history filter.
@@ -59,13 +49,11 @@ export const AdminHistory = () => {
   };
 
   /**
-   * Applies filters to both leave and adjustment histories.
+   * Applies filters to the leave history table.
    * @returns {void}
    */
   const applyFilters = () => {
-    const query = buildQuery(filters);
-    fetchAdminLeaves(query);
-    fetchAdminAdjustments(query);
+    fetchAdminLeaves(buildQuery(filters));
   };
 
   /**
@@ -75,7 +63,6 @@ export const AdminHistory = () => {
   const resetFilters = () => {
     setFilters(defaultFilters);
     fetchAdminLeaves({ processed: "true" });
-    fetchAdminAdjustments({ processed: "true" });
   };
 
   return (
@@ -91,28 +78,14 @@ export const AdminHistory = () => {
       />
 
       <div className="mt-5">
-        {loading && !adminLeaves.length && !adminAdjustments.length ? (
+        {loading && !adminLeaves.length ? (
           <PageLoader label="Loading history..." />
         ) : (
-          <div className="grid gap-8">
-            <section className="grid gap-4">
-              <h2 className="text-lg font-semibold">Leave Requests</h2>
-              <LeaveHistoryTable
-                leaves={adminLeaves}
-                showEmployee
-                emptyMessage="No leave records match these filters."
-              />
-            </section>
-
-            <section className="grid gap-4">
-              <h2 className="text-lg font-semibold">Adjustment Requests</h2>
-              <AdjustmentHistoryTable
-                adjustments={adminAdjustments}
-                showEmployee
-                emptyMessage="No adjustment records match these filters."
-              />
-            </section>
-          </div>
+          <LeaveHistoryTable
+            leaves={adminLeaves}
+            showEmployee
+            emptyMessage="No leave records match these filters."
+          />
         )}
       </div>
     </div>

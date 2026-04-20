@@ -5,10 +5,6 @@ import {
   getMyLeaves,
   getMyLeaveSummary
 } from "../controllers/leaveController.js";
-import {
-  createLeaveAdjustmentRequest,
-  getMyLeaveAdjustments
-} from "../controllers/leaveAdjustmentController.js";
 import { protect } from "../middleware/auth.js";
 import { authorize } from "../middleware/role.js";
 import { ROLES } from "../utils/constants.js";
@@ -22,8 +18,6 @@ router.route("/")
 
 router.get("/mine", getMyLeaves);
 router.get("/summary", getMyLeaveSummary);
-router.get("/adjustments/mine", getMyLeaveAdjustments);
-router.post("/:id/adjustments", createLeaveAdjustmentRequest);
 router.delete("/:id", cancelLeaveRequest);
 
 export default router;
