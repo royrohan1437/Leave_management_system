@@ -224,3 +224,13 @@ One still need to provide values for:
   <br>
   <br><img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/12588907-11a2-4625-a4f2-a24b85e61a17" /><br>
   <br><img width="1915" height="959" alt="image" src="https://github.com/user-attachments/assets/84614adb-828b-45bd-8d9e-de1241641618" /><br>
+
+  ## Video Demo
+  <div align="center">
+  <a href="https://drive.google.com/file/d/1YK9Nak7IplpwXqtv8QUrq7l51DYEh0hk/view?usp=sharing">
+    <img src="https://github.com/royrohan1437/Leave_management_system/blob/3bc86f051f1e4b305049ab88b4e49084954a8b44/frontend/src/assets/_thumbnail.png?raw=true" alt="Leave Management System Demo" width="800">
+  </a>
+  <p><b> Assignment Demo Video</b></p>
+</div>
+
+
